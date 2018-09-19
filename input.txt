@@ -2,14 +2,5 @@ CS 273 A 1 John Smith F
 CS 273 A 1 Buck Lewis B-
 CS 203 B 3 John Smith C-
 CS 243 B 3 John Smith D
-Invalid line lol
-CS 203 B 3 Buck Lewis C
-PHL 220 A 3 Sarah Torvell A
-PHL 220 A 3 Ann Erikson C
-Another fake line
-THE 105 A 3 Ann Erikson B+
-THE 105 A 3 John Smith D+
-THE 155 A 3 Elizabeth Rumplestiltskin B+
-THE 102 A 0 Nocredit Johnson B+
-SillySub 102 A 0 Nocredit Johnson L+
-THE 102 A 6 Ima Rebel B
+THE 102 A 3 Will Johnson B+
+THE 102 A 3 Will Johnson B

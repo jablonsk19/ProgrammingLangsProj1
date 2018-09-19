@@ -106,9 +106,12 @@ errorCheck str =
 --Given lines with valid formatting, returns a list describing repeated classes taken by each student
 findRepeatClasses :: [String] -> [String]
 findRepeatClasses list = 
-    let repeats = filter (\x -> matchClass "THE 102" x) list
-    in  repeats
+    let repeats = filter (hasMoreThanOne) ( groupBy (matchClass) list )
+    in  if length repeats == 0 then [] 
+        else ["Students found to be taking the same class multiple times: " ++ show repeats]
 
+
+--True if the pair is two of the same student taking the same class
 matchClass :: String -> String -> Bool
 matchClass s1 s2 = 
     if s1 == "" || s2 == "" then False else
@@ -122,12 +125,37 @@ matchClass s1 s2 =
         fname2 = w2 !! 4
         lname1 = w1 !! 5
         lname2 = w2 !! 5
-    in  dept1 == dept2 && course1 == course2
+    in  dept1 == dept2 && course1 == course2 && fname1 == fname2 && lname1 == lname2
+
+
+--True if the list contains multiple elements
+hasMoreThanOne :: [a] -> Bool
+hasMoreThanOne list = 
+    if length list > 1 then True
+    else False
 
 
 --Given lines with valid formatting, returns a list describing varying credit amounts among the same class
 findDifferentCredits :: [String] -> [String]
-findDifferentCredits list = []
+findDifferentCredits list = 
+    let invalids = filter (hasMoreThanOne) ( groupBy (matchCredit) list )
+    in  if length invalids == 0 then [] 
+        else ["Unexpected credit amounts among the following classes: " ++ show invalids]
+
+
+--True if the pair is two of the same class but differing credits
+matchCredit :: String -> String -> Bool
+matchCredit s1 s2 = 
+    if s1 == "" || s2 == "" then False else
+    let w1 = words s1
+        w2 = words s2
+        dept1 = w1 !! 0
+        dept2 = w2 !! 0
+        course1 = w1 !! 1
+        course2 = w2 !! 1
+        credits1 = w1 !! 3
+        credits2 = w2 !! 3
+    in  dept1 == dept2 && course1 == course2 && credits1 /= credits2
 
 
 --Checks the validity of a single line
@@ -174,7 +202,7 @@ checkGrade str =
         then "" else "Grade value expected (A..D, F with +/- possibly appended), \"" ++ grade ++ "\" found."
 
 
---Ensures that the subject is 
+--Ensures that the subject is in the correct format
 checkSubject :: String -> String
 checkSubject str =
     let [sub, _, _, _, _, _, _] = words str
